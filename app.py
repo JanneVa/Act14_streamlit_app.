@@ -6,10 +6,17 @@ import seaborn as sns
 import matplotlib.pyplot as plt
 from sklearn.preprocessing import StandardScaler
 
-st.set_page_config(page_title="Employee Dashboard", layout="wide")
+# Configuración de página
+st.set_page_config(page_title="Employee Insights Dashboard", layout="wide")
 st.title("Employee Insights Dashboard")
-st.markdown("Gráficas seleccionadas por zona, correlaciones y comportamiento organizacional.")
-st.caption("Análisis elaborado por **Janeth Valdivia** **Valeria Ramírez** y **Esther Apaza**")
+st.markdown("""
+### 👋 Bienvenido al panel interactivo de visualización de datos organizacionales
+
+Este dashboard te permite explorar patrones por región, analizar la relación entre bienestar, productividad y estrés, y observar correlaciones clave dentro de la organización.
+
+---
+""")
+st.caption("Análisis elaborado por **Janeth Valdivia**, **Valeria Ramírez** y **Esther Apaza**")
 
 # Cargar datos
 df = pd.read_csv("work.csv")
@@ -31,35 +38,32 @@ for zona in zonas:
         path=['departamento', 'modalidad_trabajo'],
         title=f'Distribution by Department and Work Arrangement – Area: {zona}',
         color='departamento',
-        color_discrete_sequence=px.colors.qualitative.Vivid
+        color_discrete_sequence=executive_palette
     )
-    
     fig.update_traces(textinfo='label+percent root')
     fig.update_layout(
         margin=dict(t=50, l=0, r=0, b=0),
         font=dict(family='Georgia', size=12),
         title_font=dict(size=16, family='Georgia')
     )
-    
     st.plotly_chart(fig, use_container_width=True)
 
-# 🔥 Heatmap de correlaciones con Plotly Express
-st.subheader("Matriz de Correlación General")
-
+# 🔥 Heatmap de correlaciones
+st.subheader("Heatmap de Correlaciones")
 corr = df.select_dtypes(include=['float64', 'int64']).corr()
 
 fig = px.imshow(
     corr,
     text_auto=True,
     color_continuous_scale='RdBu',
-    title='Correlation Matrix',
+    title='Correlación entre Variables',
     aspect='auto'
 )
 fig.update_layout(
     height=500,
     font=dict(family='Georgia', size=12),
     title_font=dict(size=16, family='Georgia'),
-    coloraxis_colorbar=dict(title="Correlation")
+    coloraxis_colorbar=dict(title="Correlación")
 )
 st.plotly_chart(fig, use_container_width=True)
 
@@ -86,9 +90,9 @@ if all(col in df.columns for col in selected_cols):
         color_threshold=100
     )
     fig_insight_dendro.update_layout(
-        title='Dendrogram: Relationships between Well-being, Leisure, and Productivity',
-        xaxis_title='Distance (Similarity)',
-        yaxis_title='Selected Variables',
+        title='Dendrograma de Bienestar, Ocio y Productividad',
+        xaxis_title='Distancia (Similitud)',
+        yaxis_title='Variables Seleccionadas',
         font=dict(family='Georgia', size=12)
     )
     st.plotly_chart(fig_insight_dendro, use_container_width=True)
@@ -103,7 +107,7 @@ if 'zona_geografica' in df.columns and 'salario_anual' in df.columns:
         x='zona_geografica',
         y='salario_anual',
         color='zona_geografica',
-        title='Salary Distribution by Region',
+        title='Distribución Salarial por Región',
         color_discrete_sequence=executive_palette
     )
     fig.update_layout(
@@ -124,7 +128,7 @@ if 'satisfaccion_laboral' in df.columns and 'departamento' in df.columns:
         x='departamento',
         y='satisfaccion_laboral',
         color='departamento',
-        title='Average Job Satisfaction by Department',
+        title='Satisfacción Promedio por Departamento',
         color_discrete_sequence=executive_palette
     )
     fig_bar.update_layout(
