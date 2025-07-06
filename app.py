@@ -10,7 +10,7 @@ from sklearn.preprocessing import StandardScaler
 st.set_page_config(page_title="Employee Insights Dashboard", layout="wide")
 st.title("Employee Insights Dashboard")
 st.markdown("""
-### 👋 Bienvenido al panel interactivo de visualización de datos organizacionales
+### Bienvenido al panel interactivo de visualización de datos organizacionales
 
 Este dashboard te permite explorar patrones por región, analizar la relación entre bienestar, productividad y estrés, y observar correlaciones clave dentro de la organización.
 
@@ -49,7 +49,7 @@ for zona in zonas:
     st.plotly_chart(fig, use_container_width=True)
 
 # 🔥 Heatmap de correlaciones
-st.subheader("Heatmap de Correlaciones")
+st.subheader("Heatmap")
 corr = df.select_dtypes(include=['float64', 'int64']).corr()
 
 fig = px.imshow(
